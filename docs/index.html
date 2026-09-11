@@ -1,111 +1,204 @@
-# Egg Mates 🥚
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Egg Mates Documentation</title>
+  <style>
+    body {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+      color: #513c19;
+      background: #fffaf0;
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+    }
 
-## Basic Details
+    h1, h2, h3 { color: #694b24; }
+    h1 { border-bottom: 3px solid #f5c957; padding-bottom: 12px; }
+    section {
+      margin: 28px 0;
+      padding: 22px;
+      background: #fff;
+      border-radius: 14px;
+    }
 
-### Team Name: [Your Team Name]
+    code, pre {
+      background: #fff1bd;
+      border-radius: 8px;
+    }
 
-### Team Members
+    pre { padding: 14px; overflow-x: auto; }
+    img {
+      max-width: 100%;
+      border-radius: 12px;
+      border: 1px solid #eadcc4;
+    }
 
-- Team Lead: [Name] - [College]
-- Member 2: [Name] - [College]
-- Member 3: [Name] - [College]
+    .caption { color: #806e54; font-style: italic; }
+    footer { text-align: center; color: #897558; margin: 40px 0; }
+  </style>
+</head>
 
-### Project Description
+<body>
+  <h1>Egg Mates 🥚</h1>
 
-Egg Mates is a playful social web app for people who discover matching secret codes on egg-puff sticks. Enter a code, find your Egg Mate, reveal each other's profiles, and start chatting in real time.
+  <section>
+    <h2>Basic Details</h2>
 
-### The Problem (that doesn't exist)
+    <h3>Team Name</h3>
+    <p>[Your Team Name]</p>
 
-Sometimes you eat an egg puff, find a mysterious stick code, and are left wondering whether your destiny is holding the matching stick in another tea shop. Humanity deserved answers.
+    <h3>Team Members</h3>
+    <ul>
+      <li>Team Lead: [Name] - [College]</li>
+      <li>Member 2: [Name] - [College]</li>
+      <li>Member 3: [Name] - [College]</li>
+    </ul>
 
-### The Solution (that nobody asked for)
+    <h3>Project Description</h3>
+    <p>
+      Egg Mates is a playful social web app for people who discover matching
+      secret codes on egg-puff sticks. Enter a code, find your Egg Mate,
+      reveal each other's profiles, and start chatting in real time.
+    </p>
 
-We turned snack-stick fate into a social network. Egg Mates matches two people with the same secret code, celebrates their reunion with egg-themed confetti, and gives them a chat room to break the ice.
+    <h3>The Problem (that doesn't exist)</h3>
+    <p>
+      Sometimes you eat an egg puff, find a mysterious stick code, and are
+      left wondering whether your destiny is holding the matching stick in
+      another tea shop. Humanity deserved answers.
+    </p>
 
-## Technical Details
+    <h3>The Solution (that nobody asked for)</h3>
+    <p>
+      We turned snack-stick fate into a social network. Egg Mates matches two
+      people with the same secret code, celebrates their reunion with
+      egg-themed confetti, and gives them a chat room to break the ice.
+    </p>
+  </section>
 
-### Technologies/Components Used
+  <section>
+    <h2>Technical Details</h2>
 
-For Software:
+    <h3>Technologies/Components Used</h3>
 
-- Languages used: HTML, CSS, JavaScript, SQL
-- Frameworks used: None — lightweight browser-first web application
-- Libraries used: Supabase JavaScript client, Google Fonts
-- Tools used: Supabase, GitHub, VS Code / Live Server
+    <h4>For Software</h4>
+    <ul>
+      <li>Languages used: HTML, CSS, JavaScript, SQL</li>
+      <li>Frameworks used: None — lightweight browser-first web application</li>
+      <li>Libraries used: Supabase JavaScript client, Google Fonts</li>
+      <li>Tools used: Supabase, GitHub, VS Code / Live Server</li>
+    </ul>
 
-For Hardware:
+    <h4>For Hardware</h4>
+    <ul>
+      <li>Device camera (optional, for profile photos)</li>
+      <li>Phone, tablet, or desktop browser</li>
+    </ul>
+  </section>
 
-- Device camera (optional, for profile photos)
-- Phone, tablet, or desktop browser
+  <section>
+    <h2>Implementation</h2>
 
-### Implementation
+    <h3>Installation</h3>
+    <ol>
+      <li>Create a Supabase project.</li>
+      <li>
+        Run <code>supabase/migrations/001_egg_mates.sql</code> in the
+        Supabase SQL Editor.
+      </li>
+      <li>
+        Add your project URL and publishable/anon key to
+        <code>supabase-config.js</code>.
+      </li>
+    </ol>
 
-For Software:
+    <pre><code>git clone [your-repository-url]
+cd [your-project-folder]</code></pre>
 
-# Installation
+    <h3>Run</h3>
+    <p>
+      Serve the project with a local static server, such as VS Code Live
+      Server, then open <code>index.html</code> in the browser.
+    </p>
 
-1. Create a Supabase project.
-2. Run [`supabase/migrations/001_egg_mates.sql`](./supabase/migrations/001_egg_mates.sql) in the Supabase SQL Editor.
-3. Add your project URL and publishable/anon key to `supabase-config.js`.
+    <pre><code>python -m http.server 5500</code></pre>
 
-```bash
-git clone [your-repository-url]
-cd [your-project-folder]
-```
+    <p>Open <code>http://localhost:5500</code> in your browser.</p>
+  </section>
 
-# Run
+  <section>
+    <h2>Project Documentation</h2>
 
-Serve the project with a local static server, such as VS Code Live Server, then open `index.html` in the browser.
+    <h3>Screenshots</h3>
 
-```bash
-python -m http.server 5500
-```
+    <img src="./screenshots/signup.png" alt="Egg Mates sign-up screen">
+    <p class="caption">
+      The Egg Mates sign-up screen, including profile-photo options.
+    </p>
 
-Open `http://localhost:5500` in your browser.
+    <img src="./screenshots/code-matching.png" alt="Secret-code matching">
+    <p class="caption">
+      A user enters a secret code to find their matching Egg Mate.
+    </p>
 
-## Project Documentation
+    <img src="./screenshots/chat.png" alt="Egg Mate real-time chat">
+    <p class="caption">
+      The real-time chat room created after a successful Egg Mate connection.
+    </p>
 
-For Software:
+    <h3>Workflow Diagram</h3>
 
-# Screenshots (Add at least 3)
+    <img src="./screenshots/workflow.png" alt="Egg Mates workflow diagram">
+    <p class="caption">
+      Profiles are stored in Supabase, matching codes create independent
+      connections, and each connection receives its own real-time chat room.
+    </p>
 
-![Sign-up screen](./screenshots/signup.png)
-*The Egg Mates sign-up screen, including profile-photo options.*
+    <h3>Hardware</h3>
+    <p>
+      Egg Mates is a software-only project. A device camera is optionally used
+      to capture a profile photo.
+    </p>
+  </section>
 
-![Secret-code matching](./screenshots/code-matching.png)
-*A user enters a secret code to find their matching Egg Mate.*
+  <section>
+    <h2>Project Demo</h2>
 
-![Egg Mate chat](./screenshots/chat.png)
-*The real-time chat room created after a successful Egg Mate connection.*
+    <h3>Video</h3>
+    <p>
+      <a href="#">Add your demo video link here</a>
+    </p>
 
-# Diagrams
+    <p class="caption">
+      The video should demonstrate creating a profile, entering a secret code,
+      matching with an Egg Mate, the celebration effect, and real-time chat.
+    </p>
 
-![Workflow](./screenshots/workflow.png)
-*Profiles are stored in Supabase, matching codes create independent connections, and each connection receives its own real-time chat room.*
+    <h3>Additional Demos</h3>
+    <ul>
+      <li>
+        <a href="https://github.com/Benjamin-KJ/Eggmate">
+          GitHub Repository
+        </a>
+      </li>
+      <li><a href="#">Live Demo</a></li>
+    </ul>
+  </section>
 
-For Hardware:
+  <section>
+    <h2>Team Contributions</h2>
+    <ul>
+      <li>[Name 1]: UI/UX design, responsive pages, profile experience.</li>
+      <li>[Name 2]: Supabase database schema, secret-code matching, and real-time chat.</li>
+      <li>[Name 3]: Testing, presentation, documentation, and celebration interactions.</li>
+    </ul>
+  </section>
 
-Egg Mates is a software-only project. A device camera is optionally used to capture a profile photo.
-
-## Project Demo
-
-# Video
-
-[Add your demo video link here]
-
-*The video should demonstrate creating a profile, entering a secret code, matching with an Egg Mate, the celebration effect, and real-time chat.*
-
-# Additional Demos
-
-- [GitHub Repository](https://github.com/[your-username]/[your-repository])
-- [Live Demo](https://[your-deployment-url])
-
-## Team Contributions
-
-- [Name 1]: UI/UX design, responsive pages, profile experience.
-- [Name 2]: Supabase database schema, secret-code matching, and real-time chat.
-- [Name 3]: Testing, presentation, documentation, and celebration interactions.
-
----
-
-Made with ❤️ at TinkerHub Useless Projects
+  <footer>
+    Made with ❤️ at TinkerHub Useless Projects
+  </footer>
+</body>
+</html>
