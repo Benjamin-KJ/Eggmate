@@ -96,15 +96,14 @@ Egg Mates is a software-only project. A device camera is optionally used to capt
 ## Project Demo
 
 # Video
-
-[Add your demo video link here]
+https://drive.google.com/file/d/1kOLa1h0HFjGyFk6plXv_6SUJ9snrSzjc/view?usp=drivesdk
 
 *The video should demonstrate creating a profile, entering a secret code, matching with an Egg Mate, the celebration effect, and real-time chat.*
 
 # Additional Demos
 
-- [GitHub Repository](https://github.com/[your-username]/[your-repository])
-- [Live Demo](https://[your-deployment-url])
+- [GitHub Repository]https://benjamin-kj.github.io/Eggmate/
+- Demo https://drive.google.com/file/d/1kOLa1h0HFjGyFk6plXv_6SUJ9snrSzjc/view?usp=drivesdk
 
 ## Team Contributions
 
