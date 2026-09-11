@@ -103,7 +103,7 @@ https://drive.google.com/file/d/1kOLa1h0HFjGyFk6plXv_6SUJ9snrSzjc/view?usp=drive
 # Additional Demos
 
 - [GitHub Repository](https://benjamin-kj.github.io/Eggmate/)
-- [Demo] (https://drive.google.com/file/d/1kOLa1h0HFjGyFk6plXv_6SUJ9snrSzjc/view?usp=drivesdk)
+- [Demo](https://drive.google.com/file/d/1kOLa1h0HFjGyFk6plXv_6SUJ9snrSzjc/view?usp=drivesdk)
 
 ## Team Contributions
 
