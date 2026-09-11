@@ -2,25 +2,35 @@
 
 ## Basic Details
 
-### Team Name: [Your Team Name]
+### Team Name: Sphere
 
 ### Team Members
 
-- Team Lead: [Name] - [College]
-- Member 2: [Name] - [College]
-- Member 3: [Name] - [College]
+- Team Lead: Benjamin K James - College of Engineering, Chengannur
+- Member 2: Aarone T George- College of Engineering, Chengannur
 
 ### Project Description
 
-Egg Mates is a playful social web app for people who discover matching secret codes on egg-puff sticks. Enter a code, find your Egg Mate, reveal each other's profiles, and start chatting in real time.
+Have you ever wondered who eats the other half of the egg in your egg puffs?Egg Mates is a fun,
+creative web platform that connects two strangers who unknowingly ate the two halves of the exact
+same egg.
 
 ### The Problem (that doesn't exist)
 
-Sometimes you eat an egg puff, find a mysterious stick code, and are left wondering whether your destiny is holding the matching stick in another tea shop. Humanity deserved answers.
+Sometimes you eat an egg puff and are left wondering who was destined to eat your other half of the egg. Humanity deserved answers.
 
 ### The Solution (that nobody asked for)
 
-We turned snack-stick fate into a social network. Egg Mates matches two people with the same secret code, celebrates their reunion with egg-themed confetti, and gives them a chat room to break the ice.
+1. The Hidden Stick: A food-grade wooden stick with a secret code is placed inside
+the egg puffs during baking. The two halves of the same egg share the exact same
+code.
+2. Create Your Profile: When you find a stick, you visit the Egg Mates website. You
+sign up with a username, password, name, personal photo, and a short bio.
+3. Enter the Code: Log in with your username and password, then type in your secret
+code.
+4. Meet and Chat: Once the person who ate the other half of the egg logs in and
+enters that same code, both of you can see each other's profiles and start chatting
+directly on the website if you like! 
 
 ## Technical Details
 
@@ -33,10 +43,6 @@ For Software:
 - Libraries used: Supabase JavaScript client, Google Fonts
 - Tools used: Supabase, GitHub, VS Code / Live Server
 
-For Hardware:
-
-- Device camera (optional, for profile photos)
-- Phone, tablet, or desktop browser
 
 ### Implementation
 
