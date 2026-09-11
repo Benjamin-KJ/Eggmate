@@ -108,10 +108,8 @@ Egg Mates is a software-only project. A device camera is optionally used to capt
 
 ## Team Contributions
 
-- [Name 1]: UI/UX design, responsive pages, profile experience.
-- [Name 2]: Supabase database schema, secret-code matching, and real-time chat.
-- [Name 3]: Testing, presentation, documentation, and celebration interactions.
+- Benjamin K James:  Supabase database schema, secret-code matching, and real-time chat.
+- Aarone T George: UI/UX, Physical prototype building for puffs, testing and real-time chat.
 
----
 
 Made with ❤️ at TinkerHub Useless Projects
