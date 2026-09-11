@@ -1,22 +1,945 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Egg Mates</title><style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=Playfair+Display:wght@700&display=swap');*{box-sizing:border-box}body{margin:0;font-family:'DM Sans',sans-serif;color:#513c19;background:#fffaf0}button,input{font:inherit}button{border:0;cursor:pointer}.wrap{max-width:1000px;margin:auto;padding:24px;min-height:100vh}header{display:flex;justify-content:space-between;align-items:center}.brand{font-size:21px;font-weight:700;color:#694b24}.ghost,.link{background:none;color:#8f6b30}.auth{min-height:100vh;display:grid;grid-template-columns:1.1fr .9fr}.hero{background:#f5c957;padding:12vh 8vw;color:#5d421e}.hero h1,h1,h2{font-family:'Playfair Display',serif}.hero h1{font-size:clamp(42px,6vw,70px);line-height:1.03}.card{max-width:450px;width:100%;margin:auto;padding:42px 28px}.card h2{font-size:36px;margin:35px 0 5px}.muted,.hint{color:#897558}form{display:grid;gap:14px;margin-top:24px}label{font-size:14px;font-weight:700;display:grid;gap:7px}input{border:1px solid #e3d3b6;border-radius:12px;padding:13px;background:#fff;outline:none}input:focus{border-color:#d69e23;box-shadow:0 0 0 3px #ffe9a4}.file{border:1px dashed #c9a55c;padding:11px;border-radius:12px}.file input{border:0;padding:0}.primary{background:#e9b635;color:#523d18;border-radius:13px;padding:14px 18px;font-weight:700;box-shadow:0 5px #c78e1f}.primary:disabled{opacity:.6}.link{display:block;margin:21px auto}.dash,.match{text-align:center;max-width:750px;margin:11vh auto}.tag{display:inline-block;padding:8px 12px;background:#fff0bc;color:#967018;border-radius:999px;font-size:14px;font-weight:700}.dash h1,.match h1{font-size:clamp(42px,7vw,64px);margin:15px 0 8px}.dash>p,.match>p{font-size:18px;line-height:1.55;color:#806e54}.codeform{max-width:530px;text-align:left;margin:32px auto}.codeform input{text-transform:uppercase;font-size:19px;letter-spacing:2px}.people{display:flex;align-items:center;justify-content:center;gap:25px;margin:36px 0}.person{background:#fff;width:270px;padding:23px;border-radius:23px;box-shadow:0 12px 34px #a67d2b22;animation:pop .6s both}.person:last-child{animation-delay:.18s}.person img{width:130px;height:130px;border-radius:50%;object-fit:cover;border:6px solid #fff1bd}.person h2{margin:10px 0 0}.person span{color:#a27a2e}.person p{color:#79674d;line-height:1.5}.egg{background:#f5c957;border-radius:50%;padding:17px;font-size:26px}@keyframes pop{from{opacity:0;transform:translateY(25px)}to{opacity:1;transform:none}}.chat{max-width:700px;height:calc(100vh - 105px);max-height:680px;margin:25px auto;background:#fff;border-radius:22px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 12px 35px #a67d2b22}.chathead{padding:16px 20px;border-bottom:1px solid #eee2ca;display:flex;gap:10px;align-items:center}.chathead img{width:42px;height:42px;border-radius:50%;object-fit:cover}.chathead small{display:block;color:#a17d40}.messages{flex:1;overflow:auto;padding:20px;display:flex;flex-direction:column;gap:10px;background:#fffdf8}.bubble{background:#f7ead1;padding:10px 14px;border-radius:16px 16px 16px 3px;width:max-content;max-width:72%}.mine{align-self:flex-end;background:#f5c957;border-radius:16px 16px 3px 16px}.empty{margin:auto;color:#9c8667}.send{display:grid;grid-template-columns:1fr 50px;gap:8px;padding:14px;margin:0;border-top:1px solid #eee2ca}.send button{border-radius:12px;background:#e9b635}.toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,110px);background:#4e3921;color:#fff;padding:14px 20px;border-radius:12px;transition:.25s;max-width:90vw}.toast.on{transform:translate(-50%,0)}.setup{max-width:650px;margin:15vh auto;padding:28px;background:#fff;border-radius:18px}@media(max-width:700px){.auth{display:block}.hero{min-height:260px;padding:45px 28px}.hero h1{font-size:43px}.card{padding:30px 24px}.wrap{padding:16px}.dash,.match{margin:60px auto}.people{gap:10px}.person{width:calc(50% - 17px);padding:14px}.person img{width:82px;height:82px}.person h2{font-size:19px}.person p{font-size:14px}.egg{padding:9px;font-size:18px}.chat{margin:18px 0;height:calc(100vh - 80px)}}
-</style></head><body><div id="app"></div><div id="toast" class="toast"></div><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
-// Replace these two values with your Supabase Project Settings > API values.
-const SUPABASE_URL='https://wsqbzxutzafjfwdgybgt.supabase.co',SUPABASE_KEY='sb_publishable_Mfd9mO1FPlgECl0QaVnhjw_Fa2m98n5';
-const app=document.querySelector('#app'),toast=document.querySelector('#toast');let db,me,match,ch;
-const e=s=>{const x=document.createElement('span');x.textContent=s||'';return x.innerHTML},pic=p=>p.avatar_url||'https://placehold.co/240x240/FFE9A8/674C22?text=Egg';
-const say=s=>{toast.textContent=s;toast.classList.add('on');clearTimeout(say.t);say.t=setTimeout(()=>toast.classList.remove('on'),4000)},clear=()=>{if(ch)db.removeChannel(ch);ch=null};
-async function hash(s){const d=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return[...new Uint8Array(d)].map(x=>x.toString(16).padStart(2,'0')).join('')}
-async function imageData(file){return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(new Error('Could not read that image.'));reader.readAsDataURL(file)})}
-if(SUPABASE_URL.includes('YOUR-'))app.innerHTML='<main class="setup"><h1>Add your Supabase keys</h1><p>Edit <code>SUPABASE_URL</code> and <code>SUPABASE_KEY</code> near the bottom of this index.html file.</p></main>';else if(!window.supabase)app.innerHTML='<main class="setup"><h1>Could not load Supabase</h1><p>Open this site using VS Code Live Server, then check that your internet connection allows cdn.jsdelivr.net.</p></main>';else{db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);boot()}
-async function boot(){clear();let s=localStorage.getItem('egg-mates-active-profile');if(!s)return auth();me=JSON.parse(s);let{data}=await db.from('profiles').select('*').eq('id',me.id).maybeSingle();if(data){me=data;localStorage.setItem('egg-mates-active-profile',JSON.stringify(me))}dashboard()}
-function shell(x){app.innerHTML=`<main class="wrap"><header><b class="brand">🥚 Egg Mates</b><button class="ghost" id="out">↪ Sign out</button></header>${x}</main>`;document.querySelector('#out').onclick=()=>{localStorage.removeItem('egg-mates-active-profile');boot()}}
-function auth(){clear();app.innerHTML='<main class="auth"><section class="hero"><div style="font-size:62px">🥚</div><h1>Two sticks.<br>One tiny world.</h1><p>Find the person who discovered your matching secret code.</p></section><section class="card"><b class="brand">🥚 Egg Mates</b><div id="form"></div></section></main>';authform(false)}
-function authform(sign){document.querySelector('#form').innerHTML=`<h2>${sign?'Create a demo profile':'Welcome back'}</h2><p class="muted">${sign?'No email or Supabase authentication needed. Your public demo profile will be shared with your Egg Mate.':'Sign in to your browser-only demo profile.'}</p><form id="login"><label>Username<input name="u" required minlength="3" pattern="[A-Za-z0-9_]+"></label><label>Password<input name="p" type="password" required minlength="8"></label>${sign?'<label>Full name<input name="n" required maxlength="80"></label><label>Profile photo<span class="file">▧ <input name="photo" type="file" accept="image/*" required></span></label><label>Short bio<input name="bio" required maxlength="240"></label>':''}<button class="primary">${sign?'Create demo profile →':'Demo sign in →'}</button></form><button class="link" id="switch">${sign?'Already have a demo profile? Sign in':'New here? Create a demo profile'}</button>`;document.querySelector('#switch').onclick=()=>authform(!sign);document.querySelector('#login').onsubmit=async ev=>{ev.preventDefault();let f=new FormData(ev.currentTarget),u=String(f.get('u')).trim(),p=String(f.get('p')),b=ev.currentTarget.querySelector('button');b.disabled=true;try{if(!sign){let a=JSON.parse(localStorage.getItem('egg-account-'+u.toLowerCase())||'null');if(!a||a.h!==await hash(p))throw Error('That username or password is not available in this browser.');let{data,error}=await db.from('profiles').select('*').eq('id',a.id).maybeSingle();if(error)throw error;if(!data){let old=JSON.parse(localStorage.getItem('egg-profile-'+a.id)||localStorage.getItem('egg-mates-active-profile')||'null');if(!old)throw Error('Create a fresh demo profile in this browser.');let{error:publishError}=await db.from('profiles').insert(old);if(publishError)throw Error('Run egg_mates_demo_setup.sql in Supabase SQL Editor, then try again.');data=old}localStorage.setItem('egg-mates-active-profile',JSON.stringify(data));boot()}else{let photo=f.get('photo');if(!(photo instanceof File)||!photo.size)throw Error('Please choose a profile photo.');if(localStorage.getItem('egg-account-'+u.toLowerCase()))throw Error('That username is already registered in this browser.');let id=crypto.randomUUID(),obj={id,username:u,full_name:String(f.get('n')).trim(),bio:String(f.get('bio')).trim(),avatar_url:await imageData(photo)},{error}=await db.from('profiles').insert(obj);if(error)throw Error('Could not save the shared demo profile. Run egg_mates_demo_setup.sql in Supabase SQL Editor, then try again.');localStorage.setItem('egg-account-'+u.toLowerCase(),JSON.stringify({id,h:await hash(p)}));localStorage.setItem('egg-profile-'+id,JSON.stringify(obj));localStorage.setItem('egg-mates-active-profile',JSON.stringify(obj));boot()}}catch(x){say(x.message);b.disabled=false}}}
-function dashboard(){shell(`<section class="dash"><div class="tag">✦ The surprise is waiting</div><h1>Hey, ${e(me.full_name.split(' ')[0])}.</h1><p>Enter the secret code from your egg puff stick. If someone found its twin, we’ll introduce you.</p><form class="codeform" id="code"><label>Enter Your Secret Code<input name="v" required maxlength="64" placeholder="e.g. SUNNY-42"></label><button class="primary">Find my mate →</button></form><p class="hint">Each code can connect exactly two Egg Mates.</p></section>`);document.querySelector('#code').onsubmit=claim;ch=db.channel('matches-'+me.id).on('postgres_changes',{event:'UPDATE',schema:'public',table:'codes',filter:'user_id1=eq.'+me.id},async p=>{if(p.new.status==='matched')reveal(p.new.user_id2,p.new.chat_id)}).subscribe()}
-async function claim(ev){ev.preventDefault();let b=ev.currentTarget.querySelector('button');b.disabled=true;try{let{data,error}=await db.rpc('claim_secret_code',{entered_code:ev.currentTarget.v.value.trim().toUpperCase(),claimant_id:me.id});if(error)throw error;let r=data[0];if(r.result==='redeemed')return say('This code has already been redeemed by two Egg Mates!');if(r.result==='own_code')return say('You already entered this code. It is waiting for your Egg Mate.');if(r.result==='waiting')return say('Your code is saved! We’ll reveal your Egg Mate when they arrive.');reveal(r.other_user_id,r.chat_id)}catch(x){say(x.message)}finally{b.disabled=false}}
-const person=p=>`<article class="person"><img src="${e(pic(p))}"><h2>${e(p.full_name)}</h2><span>@${e(p.username)}</span><p>${e(p.bio)}</p></article>`;
-async function reveal(id,chat){let{data,error}=await db.from('profiles').select('*').eq('id',id).single();if(error)return say(error.message);match={other:data,chat};clear();shell(`<section class="match"><div class="tag">✦ It’s a match!</div><h1>Your egg puff sticks led here.</h1><p>Say hello to the person who found the other half of your secret.</p><div class="people">${person(me)}<div class="egg">🥚</div>${person(data)}</div><button class="primary" id="chat">💬 Start Chatting</button></section>`);document.querySelector('#chat').onclick=chatroom}
-function chatroom(){shell(`<section class="chat"><div class="chathead"><img src="${e(pic(match.other))}"><div><b>${e(match.other.full_name)}</b><small>Your Egg Mate</small></div></div><div class="messages" id="msgs"><p class="empty">Break the ice — your Egg Mate is here.</p></div><form class="send" id="send"><input name="b" placeholder="Write a message…" required maxlength="2000"><button>➤</button></form></section>`);load();ch=db.channel('chat-'+match.chat).on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:'chat_id=eq.'+match.chat},p=>add(p.new)).subscribe();document.querySelector('#send').onsubmit=async ev=>{ev.preventDefault();let i=ev.currentTarget.b,t=i.value.trim();if(!t)return;i.value='';let{error}=await db.from('messages').insert({chat_id:match.chat,sender_id:me.id,body:t});if(error){i.value=t;say(error.message)}}}
-async function load(){let{data}=await db.from('messages').select('*').eq('chat_id',match.chat).order('created_at'),x=document.querySelector('#msgs');x.innerHTML='';(data||[]).forEach(add)}function add(m){let x=document.querySelector('#msgs');if(!x)return;x.querySelector('.empty')?.remove();let d=document.createElement('div');d.className='bubble '+(m.sender_id===me.id?'mine':'');d.textContent=m.body;x.append(d);x.scrollTop=x.scrollHeight}
-</script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Egg Mates</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=Playfair+Display:wght@700&display=swap');
+*{box-sizing:border-box}body{margin:0;background:#fffaf0;color:#513c19;font-family:'DM Sans',sans-serif}button,input,textarea{font:inherit}button{border:0;cursor:pointer}h1,h2{font-family:'Playfair Display',serif}.wrap{max-width:1000px;margin:auto;padding:24px;min-height:100vh}header{display:flex;justify-content:space-between;align-items:center;gap:15px}.brand{font-size:21px;font-weight:700;color:#694b24;white-space:nowrap}.topnav{display:flex;align-items:center;gap:8px}.navbtn{background:#fff1bd;color:#694b24;border-radius:12px;padding:10px 13px;font-weight:700}.navbtn:hover{background:#f5c957}.profile-btn{background:#e9b635;color:#523d18}.auth{min-height:100vh;display:grid;grid-template-columns:1.1fr .9fr}.hero{background:#f5c957;padding:12vh 8vw;color:#5d421e}.hero h1{font-size:clamp(42px,6vw,70px);line-height:1.03}.card{max-width:450px;width:100%;margin:auto;padding:42px 28px}.card h2{font-size:36px;margin:35px 0 5px}.muted,.hint{color:#897558}form{display:grid;gap:14px;margin-top:24px}label{font-size:14px;font-weight:700;display:grid;gap:7px}input,textarea{width:100%;border:1px solid #e3d3b6;border-radius:12px;padding:13px;background:#fff;outline:none}textarea{resize:vertical;min-height:90px}input:focus,textarea:focus{border-color:#d69e23;box-shadow:0 0 0 3px #ffe9a4}.file{border:1px dashed #c9a55c;padding:11px;border-radius:12px}.file input{border:0;padding:0}.primary{background:#e9b635;color:#523d18;border-radius:13px;padding:14px 18px;font-weight:700;box-shadow:0 5px #c78e1f}.secondary{background:#fff1bd;color:#694b24;border-radius:13px;padding:13px;font-weight:700}.danger{background:#fff0ed;color:#a13b2e;border:1px solid #edb3aa;border-radius:13px;padding:13px;font-weight:700}.primary:disabled,.secondary:disabled{opacity:.6;cursor:wait}.link{display:block;background:none;color:#8f6b30;margin:20px auto}.dash,.match{text-align:center;max-width:750px;margin:8vh auto}.tag{display:inline-block;padding:8px 12px;background:#fff0bc;color:#967018;border-radius:999px;font-size:14px;font-weight:700}.dash h1,.match h1{font-size:clamp(42px,7vw,64px);margin:15px 0 8px}.dash>p,.match>p{font-size:18px;line-height:1.55;color:#806e54}.codeform{max-width:530px;text-align:left;margin:32px auto}.codeform input{text-transform:uppercase;font-size:19px;letter-spacing:2px}.connections{max-width:560px;margin:35px auto;text-align:left}.connections h2{font-size:26px;margin:0 0 14px}.connection{display:flex;align-items:center;gap:14px;background:#fff;padding:14px;border-radius:18px;margin:10px 0;box-shadow:0 8px 25px #a67d2b1f}.connection img{width:58px;height:58px;border-radius:50%;object-fit:cover}.connection small{display:block;color:#a17d40;margin-top:3px}.connection .primary{margin-left:auto;padding:10px 13px;font-size:14px;box-shadow:0 3px #c78e1f}.empty{color:#9c8667;padding:22px;text-align:center}.people{display:flex;align-items:center;justify-content:center;gap:25px;margin:36px 0}.person{background:#fff;width:270px;padding:23px;border-radius:23px;box-shadow:0 12px 34px #a67d2b22}.person img{width:130px;height:130px;border-radius:50%;object-fit:cover;border:6px solid #fff1bd}.person h2{margin:10px 0 0}.person span{color:#a27a2e}.person p{color:#79674d;line-height:1.5}.egg{background:#f5c957;border-radius:50%;padding:17px;font-size:26px}.chat{max-width:700px;height:calc(100vh - 105px);max-height:680px;margin:25px auto;background:#fff;border-radius:22px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 12px 35px #a67d2b22}.chathead{padding:16px 20px;border-bottom:1px solid #eee2ca;display:flex;gap:10px;align-items:center}.chathead img{width:42px;height:42px;border-radius:50%;object-fit:cover}.chathead small{display:block;color:#a17d40}.messages{flex:1;overflow:auto;padding:20px;display:flex;flex-direction:column;gap:10px;background:#fffdf8}.bubble{background:#f7ead1;padding:10px 14px;border-radius:16px 16px 16px 3px;width:max-content;max-width:72%}.mine{align-self:flex-end;background:#f5c957;border-radius:16px 16px 3px 16px}.send{display:grid;grid-template-columns:1fr 50px;gap:8px;padding:14px;margin:0;border-top:1px solid #eee2ca}.send button{border-radius:12px;background:#e9b635}.toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,110px);background:#4e3921;color:#fff;padding:14px 20px;border-radius:12px;transition:.25s;max-width:90vw;z-index:100}.toast.on{transform:translate(-50%,0)}.menu{display:none;position:absolute;right:0;top:49px;width:220px;background:#fff;padding:9px;border:1px solid #eadcc4;border-radius:16px;box-shadow:0 14px 36px #6e4d1828;z-index:60}.menu.open{display:block}.menu button{display:flex;width:100%;gap:10px;padding:11px;background:transparent;text-align:left;border-radius:10px;color:#5f4825;font-weight:700}.menu button:hover{background:#fff3cc}.menu hr{border:0;border-top:1px solid #eee2ca;margin:8px 3px}.profile-wrap{position:relative}.modal{position:fixed;inset:0;background:#2d200d88;display:grid;place-items:center;padding:16px;z-index:80}.modal-card{width:min(540px,100%);max-height:92vh;overflow:auto;background:#fffaf0;border-radius:24px;padding:24px;box-shadow:0 20px 60px #2d200d66}.modal-head{display:flex;justify-content:space-between;align-items:center}.modal-head h2{margin:0;font-size:29px}.close{background:#fff1bd;border-radius:10px;width:38px;height:38px;font-size:21px}.preview{display:flex;justify-content:center;margin:18px 0}.preview img{width:130px;height:130px;object-fit:cover;border-radius:50%;border:6px solid #fff1bd}.photo-actions,.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}.camera{display:none;margin-top:14px;border-radius:16px;overflow:hidden;background:#2d200d}.camera video{display:block;width:100%;max-height:310px;object-fit:cover}.camera div{display:flex;gap:10px;padding:10px}.camera div button{flex:1}.validation{display:none;background:#fff0ed;border:1px solid #edb3aa;color:#a13b2e;border-radius:11px;padding:11px;margin-top:12px}.validation.show{display:block}.confetti{position:fixed;inset:0;pointer-events:none;z-index:90;overflow:hidden}.confetti i{position:absolute;top:-40px;font-style:normal;font-size:28px;animation:fall 2.8s linear forwards}@keyframes fall{to{transform:translate(var(--x),110vh) rotate(720deg);opacity:0}}@media(max-width:700px){.auth{display:block}.hero{min-height:260px;padding:45px 28px}.hero h1{font-size:43px}.card{padding:30px 24px}.wrap{padding:16px}.navbtn{padding:9px 10px;font-size:13px}.dash,.match{margin:45px auto}.people{gap:10px}.person{width:calc(50% - 17px);padding:14px}.person img{width:82px;height:82px}.person h2{font-size:19px}.person p{font-size:14px}.egg{padding:9px;font-size:18px}.chat{margin:18px 0;height:calc(100vh - 80px)}.photo-actions,.actions{grid-template-columns:1fr}.menu{position:fixed;right:16px;top:64px;width:min(260px,calc(100vw - 32px))}}
+</style>
+</head>
+
+<body>
+<div id="app"></div>
+<div id="toast" class="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL='https://wsqbzxutzafjfwdgybgt.supabase.co';
+const SUPABASE_KEY='sb_publishable_Mfd9mO1FPlgECl0QaVnhjw_Fa2m98n5';
+
+const app=document.querySelector('#app');
+const toast=document.querySelector('#toast');
+
+let db,me,activeChat,cameraStream,draftPhoto;
+let channels=[],connections=new Map(),celebrated=new Set(),messageIds=new Set();
+
+const esc=value=>{
+  const node=document.createElement('span');
+  node.textContent=value||'';
+  return node.innerHTML;
+};
+
+const pic=profile=>
+  profile.avatar_url||
+  'https://placehold.co/240x240/FFE9A8/674C22?text=Egg';
+
+const say=text=>{
+  toast.textContent=text;
+  toast.classList.add('on');
+  clearTimeout(say.timer);
+  say.timer=setTimeout(()=>toast.classList.remove('on'),4000);
+};
+
+const clear=()=>{
+  channels.forEach(channel=>db?.removeChannel(channel));
+  channels=[];
+};
+
+async function hash(text){
+  const digest=await crypto.subtle.digest(
+    'SHA-256',
+    new TextEncoder().encode(text)
+  );
+
+  return [...new Uint8Array(digest)]
+    .map(value=>value.toString(16).padStart(2,'0'))
+    .join('');
+}
+
+function readImage(file){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onload=()=>resolve(reader.result);
+    reader.onerror=()=>reject(new Error('Could not read that image.'));
+    reader.readAsDataURL(file);
+  });
+}
+
+if(!window.supabase){
+  app.innerHTML='<main class="wrap"><h1>Supabase could not load.</h1></main>';
+}else{
+  db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+  boot();
+}
+
+async function boot(){
+  clear();
+  connections=new Map();
+
+  const saved=localStorage.getItem('egg-mates-active-profile');
+
+  if(!saved){
+    auth();
+    return;
+  }
+
+  me=JSON.parse(saved);
+
+  const {data}=await db
+    .from('profiles')
+    .select('*')
+    .eq('id',me.id)
+    .maybeSingle();
+
+  if(data){
+    me=data;
+    localStorage.setItem('egg-mates-active-profile',JSON.stringify(me));
+  }
+
+  dashboard();
+}
+
+function shell(content){
+  app.innerHTML=`
+    <main class="wrap">
+      <header>
+        <b class="brand">🥚 Egg Mates</b>
+
+        <nav class="topnav">
+          <button class="navbtn" id="new">👤+ New Eggmates</button>
+          <button class="navbtn" id="mine">👥 My Eggmates</button>
+
+          <div class="profile-wrap">
+            <button class="navbtn profile-btn" id="profile">◉ Profile</button>
+
+            <div class="menu" id="profile-menu">
+              <button id="view">◉ View Profile</button>
+              <button id="edit">✎ Edit Profile</button>
+              <hr>
+              <button id="signout">⇥ Sign Out</button>
+              <button id="delete">🗑 Delete Account</button>
+            </div>
+          </div>
+        </nav>
+      </header>
+
+      ${content}
+    </main>
+  `;
+
+  document.querySelector('#new').onclick=showNew;
+  document.querySelector('#mine').onclick=dashboard;
+
+  document.querySelector('#profile').onclick=()=>{
+    document.querySelector('#profile-menu').classList.toggle('open');
+  };
+
+  document.querySelector('#view').onclick=viewProfile;
+  document.querySelector('#edit').onclick=editProfile;
+  document.querySelector('#signout').onclick=signOut;
+  document.querySelector('#delete').onclick=deleteAccount;
+}
+
+function auth(){
+  clear();
+
+  app.innerHTML=`
+    <main class="auth">
+      <section class="hero">
+        <div style="font-size:62px">🥚</div>
+        <h1>Find your other half.</h1>
+        <p>Meet your Eggmates.</p>
+      </section>
+
+      <section class="card">
+        <b class="brand">🥚 Egg Mates</b>
+        <div id="auth"></div>
+      </section>
+    </main>
+  `;
+
+  authForm(false);
+}
+
+function authForm(signUp){
+  draftPhoto='';
+
+  document.querySelector('#auth').innerHTML=`
+    <h2>${signUp?'Create a profile':'Welcome back'}</h2>
+
+    <p class="muted">
+      ${signUp?'Your public profile appears when you match.':'Sign in on this browser to see your Egg Mates.'}
+    </p>
+
+    <form id="login">
+      <label>
+        Username
+        <input name="username" required minlength="3" pattern="[A-Za-z0-9_]+">
+      </label>
+
+      <label>
+        Password
+        <input name="password" type="password" required minlength="8">
+      </label>
+
+      ${signUp?`
+        <label>
+          Full name
+          <input name="fullName" required maxlength="80">
+        </label>
+
+        <label>
+          Upload Photo
+          <span class="file">
+            🖼 <input name="photo" type="file" accept="image/*">
+          </span>
+        </label>
+
+        <button type="button" class="secondary" id="signup-camera">
+          📷 Take Photo
+        </button>
+
+        <div id="signup-preview" class="preview" style="display:none">
+          <img id="signup-image" alt="Your new profile photo">
+        </div>
+
+        <label>
+          Short introduction
+          <input name="bio" required maxlength="240">
+        </label>
+      `:''}
+
+      <button class="primary">${signUp?'Create profile →':'Sign in →'}</button>
+    </form>
+
+    <button class="link" id="switch">
+      ${signUp?'Already have a profile? Sign in':'New here? Create a profile'}
+    </button>
+  `;
+
+  document.querySelector('#switch').onclick=()=>authForm(!signUp);
+
+  document.querySelector('input[name="photo"]')?.addEventListener('change',async event=>{
+    const file=event.target.files[0];
+    if(!file) return;
+
+    try{
+      draftPhoto=await readImage(file);
+      showSignupPreview();
+      say('Photo selected. Complete your profile to continue.');
+    }catch(error){
+      say(error.message);
+    }
+  });
+
+  document.querySelector('#signup-camera')?.addEventListener('click',()=>{
+    cameraModal(image=>{
+      draftPhoto=image;
+      showSignupPreview();
+      say('Photo captured. Complete your profile to continue.');
+    });
+  });
+
+  document.querySelector('#login').onsubmit=async event=>{
+    event.preventDefault();
+
+    const form=new FormData(event.currentTarget);
+    const username=String(form.get('username')).trim();
+    const password=String(form.get('password'));
+    const button=event.currentTarget.querySelector('.primary');
+
+    button.disabled=true;
+
+    try{
+      if(!signUp){
+        const account=JSON.parse(
+          localStorage.getItem('egg-account-'+username.toLowerCase())||'null'
+        );
+
+        if(!account||account.passwordHash!==await hash(password)){
+          throw new Error('That username or password is not available in this browser.');
+        }
+
+        const {data,error}=await db
+          .from('profiles')
+          .select('*')
+          .eq('id',account.id)
+          .maybeSingle();
+
+        if(error||!data) throw new Error('Your profile could not be found.');
+
+        me=data;
+        localStorage.setItem('egg-mates-active-profile',JSON.stringify(me));
+        dashboard();
+        return;
+      }
+
+      if(!draftPhoto) throw new Error('Profile photo is required. Use Take Photo or Upload Photo.');
+      if(!String(form.get('bio')).trim()) throw new Error('Short introduction is required.');
+
+      if(localStorage.getItem('egg-account-'+username.toLowerCase())){
+        throw new Error('That username is already registered in this browser.');
+      }
+
+      const profile={
+        id:crypto.randomUUID(),
+        username,
+        full_name:String(form.get('fullName')).trim(),
+        bio:String(form.get('bio')).trim(),
+        avatar_url:draftPhoto
+      };
+
+      const {error}=await db.from('profiles').insert(profile);
+      if(error) throw error;
+
+      localStorage.setItem(
+        'egg-account-'+username.toLowerCase(),
+        JSON.stringify({
+          id:profile.id,
+          passwordHash:await hash(password)
+        })
+      );
+
+      me=profile;
+      localStorage.setItem('egg-mates-active-profile',JSON.stringify(me));
+      dashboard();
+    }catch(error){
+      say(error.message);
+      button.disabled=false;
+    }
+  };
+}
+
+function showSignupPreview(){
+  const preview=document.querySelector('#signup-preview');
+  const image=document.querySelector('#signup-image');
+
+  if(preview&&image){
+    image.src=draftPhoto;
+    preview.style.display='flex';
+  }
+}
+
+function cameraModal(done){
+  const modal=document.createElement('div');
+  modal.className='modal';
+
+  modal.innerHTML=`
+    <section class="modal-card">
+      <div class="modal-head">
+        <h2>Take Profile Photo</h2>
+        <button class="close" id="camera-close">×</button>
+      </div>
+
+      <div class="camera" id="camera-box" style="display:block">
+        <video id="camera-video" autoplay playsinline></video>
+
+        <div>
+          <button class="secondary" id="camera-capture">Capture</button>
+          <button class="secondary" id="camera-cancel">Cancel</button>
+        </div>
+      </div>
+
+      <p class="muted" id="camera-message">Requesting camera permission…</p>
+    </section>
+  `;
+
+  document.body.append(modal);
+
+  const close=()=>{
+    stopCamera();
+    modal.remove();
+  };
+
+  modal.querySelector('#camera-close').onclick=close;
+  modal.querySelector('#camera-cancel').onclick=close;
+
+  modal.querySelector('#camera-capture').onclick=()=>{
+    const video=modal.querySelector('#camera-video');
+
+    if(!video.videoWidth){
+      say('Camera is still loading. Please wait a moment.');
+      return;
+    }
+
+    const canvas=document.createElement('canvas');
+    canvas.width=video.videoWidth;
+    canvas.height=video.videoHeight;
+    canvas.getContext('2d').drawImage(video,0,0);
+
+    const image=canvas.toDataURL('image/jpeg',.88);
+
+    close();
+    done(image);
+  };
+
+  navigator.mediaDevices.getUserMedia({
+    video:{facingMode:'user'},
+    audio:false
+  }).then(stream=>{
+    cameraStream=stream;
+    const video=modal.querySelector('#camera-video');
+    video.srcObject=stream;
+    modal.querySelector('#camera-message').textContent='Position your face, then tap Capture.';
+  }).catch(()=>{
+    modal.querySelector('#camera-message').textContent=
+      'Camera access was denied or unavailable. Please use Upload Photo instead.';
+    modal.querySelector('#camera-capture').disabled=true;
+  });
+}
+
+function stopCamera(){
+  if(cameraStream){
+    cameraStream.getTracks().forEach(track=>track.stop());
+    cameraStream=null;
+  }
+}
+
+function dashboard(){
+  clear();
+
+  shell(`
+    <section class="dash">
+      <div class="tag">✦ The surprise is waiting</div>
+      <h1>Hey, ${esc(me.full_name.split(' ')[0])}.</h1>
+      <p>Enter another secret code, or chat with one of your Egg Mates.</p>
+
+      <form class="codeform" id="code">
+        <label>
+          Enter Your Secret Code
+          <input name="value" required maxlength="64" placeholder="e.g. SUNNY-42">
+        </label>
+
+        <button class="primary">Find my mate →</button>
+      </form>
+
+      <section class="connections">
+        <h2>My Eggmates</h2>
+        <div id="list"><p class="empty">Loading your Egg Mates…</p></div>
+      </section>
+    </section>
+  `);
+
+  document.querySelector('#code').onsubmit=claim;
+  loadConnections();
+  watchMatches();
+}
+
+function showNew(){
+  dashboard();
+  setTimeout(()=>document.querySelector('#code input')?.focus(),0);
+}
+
+async function loadConnections(){
+  const {data,error}=await db
+    .from('codes')
+    .select('*')
+    .or(`user_id1.eq.${me.id},user_id2.eq.${me.id}`)
+    .eq('status','matched');
+
+  if(error) return say(error.message);
+
+  for(const code of data||[]) await addConnection(code,false);
+  renderConnections();
+}
+
+async function addConnection(code,isNew){
+  if(
+    code.status!=='matched'||
+    (code.user_id1!==me.id&&code.user_id2!==me.id)||
+    connections.has(code.chat_id)
+  ) return;
+
+  const otherId=code.user_id1===me.id?code.user_id2:code.user_id1;
+
+  const {data:other,error}=await db
+    .from('profiles')
+    .select('*')
+    .eq('id',otherId)
+    .single();
+
+  if(error||!other) return;
+
+  const connection={chatId:code.chat_id,other};
+  connections.set(connection.chatId,connection);
+
+  if(isNew){
+    renderConnections();
+    confirmConnection(connection);
+  }
+
+  return connection;
+}
+
+function renderConnections(){
+  const list=document.querySelector('#list');
+  if(!list) return;
+
+  const all=[...connections.values()];
+
+  list.innerHTML=all.length
+    ?all.map(connection=>`
+      <article class="connection">
+        <img src="${esc(pic(connection.other))}" alt="${esc(connection.other.full_name)}">
+
+        <div>
+          <b>${esc(connection.other.full_name)}</b>
+          <small>@${esc(connection.other.username)} · Egg Mate</small>
+        </div>
+
+        <button class="primary" data-chat="${connection.chatId}">Chat</button>
+      </article>
+    `).join('')
+    :'<p class="empty">No Egg Mates yet. Your next code could change that.</p>';
+
+  list.querySelectorAll('[data-chat]').forEach(button=>{
+    button.onclick=()=>openChat(button.dataset.chat);
+  });
+}
+
+function watchMatches(){
+  const channel=db.channel('matches-'+me.id).on(
+    'postgres_changes',
+    {event:'UPDATE',schema:'public',table:'codes'},
+    async payload=>{
+      const code=payload.new;
+
+      if(
+        code.status==='matched'&&
+        (code.user_id1===me.id||code.user_id2===me.id)
+      ){
+        await addConnection(code,true);
+      }
+    }
+  ).subscribe();
+
+  channels.push(channel);
+}
+
+async function claim(event){
+  event.preventDefault();
+
+  const button=event.currentTarget.querySelector('button');
+  button.disabled=true;
+
+  try{
+    const {data,error}=await db.rpc('claim_secret_code',{
+      entered_code:event.currentTarget.value.value.trim().toUpperCase(),
+      claimant_id:me.id
+    });
+
+    if(error) throw error;
+
+    const result=data[0];
+
+    if(result.result==='redeemed'){
+      return say('This code has already been redeemed by two Egg Mates!');
+    }
+
+    if(result.result==='own_code'){
+      return say('You already entered this code. It is waiting for your Egg Mate.');
+    }
+
+    if(result.result==='waiting'){
+      return say('Your code is saved! We’ll reveal your Egg Mate when they arrive.');
+    }
+
+    const {data:other,error:profileError}=await db
+      .from('profiles')
+      .select('*')
+      .eq('id',result.other_user_id)
+      .single();
+
+    if(profileError) throw profileError;
+
+    const connection={chatId:result.chat_id,other};
+
+    if(!connections.has(connection.chatId)){
+      connections.set(connection.chatId,connection);
+      renderConnections();
+    }
+
+    confirmConnection(connection);
+  }catch(error){
+    say(error.message);
+  }finally{
+    button.disabled=false;
+  }
+}
+
+function confirmConnection(connection){
+  if(celebrated.has(connection.chatId)) return;
+
+  celebrated.add(connection.chatId);
+  celebrate();
+
+  shell(`
+    <section class="match">
+      <div class="tag">✦ It’s a match!</div>
+      <h1>Your egg puff sticks led here.</h1>
+      <p>Say hello to the person who found the other half of your secret.</p>
+
+      <div class="people">
+        ${person(me)}
+        <div class="egg">🥚</div>
+        ${person(connection.other)}
+      </div>
+
+      <button class="primary" id="chat">💬 Start Chatting</button>
+      <button class="link" id="back">View all my Eggmates</button>
+    </section>
+  `);
+
+  document.querySelector('#chat').onclick=()=>openChat(connection.chatId);
+  document.querySelector('#back').onclick=dashboard;
+}
+
+function person(profile){
+  return `
+    <article class="person">
+      <img src="${esc(pic(profile))}" alt="${esc(profile.full_name)}">
+      <h2>${esc(profile.full_name)}</h2>
+      <span>@${esc(profile.username)}</span>
+      <p>${esc(profile.bio)}</p>
+    </article>
+  `;
+}
+
+async function openChat(chatId){
+  const connection=connections.get(chatId);
+
+  if(!connection) return say('This chat could not be opened.');
+
+  clear();
+  activeChat=connection;
+  messageIds=new Set();
+
+  shell(`
+    <section class="chat">
+      <div class="chathead">
+        <img src="${esc(pic(connection.other))}">
+
+        <div>
+          <b>${esc(connection.other.full_name)}</b>
+          <small>Your Egg Mate</small>
+        </div>
+      </div>
+
+      <div class="messages" id="msgs">
+        <p class="empty">Break the ice — your Egg Mate is here.</p>
+      </div>
+
+      <form class="send" id="send">
+        <input name="body" placeholder="Write a message…" required maxlength="2000">
+        <button aria-label="Send message">➤</button>
+      </form>
+    </section>
+  `);
+
+  await loadMessages();
+
+  const channel=db.channel('chat-'+chatId).on(
+    'postgres_changes',
+    {
+      event:'INSERT',
+      schema:'public',
+      table:'messages',
+      filter:'chat_id=eq.'+chatId
+    },
+    payload=>addMessage(payload.new)
+  ).subscribe();
+
+  channels.push(channel);
+
+  document.querySelector('#send').onsubmit=async event=>{
+    event.preventDefault();
+
+    const input=event.currentTarget.body;
+    const body=input.value.trim();
+
+    if(!body) return;
+
+    input.value='';
+
+    const {error}=await db.from('messages').insert({
+      chat_id:chatId,
+      sender_id:me.id,
+      body
+    });
+
+    if(error){
+      input.value=body;
+      say(error.message);
+    }
+  };
+}
+
+async function loadMessages(){
+  const {data,error}=await db
+    .from('messages')
+    .select('id,sender_id,body,created_at')
+    .eq('chat_id',activeChat.chatId)
+    .order('created_at')
+    .limit(100);
+
+  if(error) return say(error.message);
+
+  const box=document.querySelector('#msgs');
+  box.innerHTML='';
+
+  (data||[]).forEach(addMessage);
+}
+
+function addMessage(message){
+  if(messageIds.has(message.id)) return;
+
+  messageIds.add(message.id);
+
+  const box=document.querySelector('#msgs');
+  if(!box) return;
+
+  box.querySelector('.empty')?.remove();
+
+  const bubble=document.createElement('div');
+  bubble.className='bubble '+(message.sender_id===me.id?'mine':'');
+  bubble.textContent=message.body;
+
+  box.append(bubble);
+
+  requestAnimationFrame(()=>{
+    box.scrollTop=box.scrollHeight;
+  });
+}
+
+function viewProfile(){
+  document.querySelector('#profile-menu').classList.remove('open');
+
+  const modal=document.createElement('div');
+  modal.className='modal';
+
+  modal.innerHTML=`
+    <section class="modal-card">
+      <div class="modal-head">
+        <h2>My Profile</h2>
+        <button class="close">×</button>
+      </div>
+
+      <div class="preview"><img src="${esc(pic(me))}"></div>
+
+      <h2 style="text-align:center;margin:0">${esc(me.full_name)}</h2>
+      <p style="text-align:center;color:#a27a2e">@${esc(me.username)}</p>
+      <p style="text-align:center;color:#79674d">${esc(me.bio)}</p>
+
+      <button class="primary" id="edit-now" style="width:100%">Edit Profile</button>
+    </section>
+  `;
+
+  document.body.append(modal);
+
+  modal.querySelector('.close').onclick=()=>modal.remove();
+  modal.querySelector('#edit-now').onclick=()=>{
+    modal.remove();
+    editProfile();
+  };
+}
+
+function editProfile(){
+  document.querySelector('#profile-menu')?.classList.remove('open');
+
+  draftPhoto=me.avatar_url||'';
+
+  const modal=document.createElement('div');
+  modal.className='modal';
+
+  modal.innerHTML=`
+    <section class="modal-card">
+      <div class="modal-head">
+        <h2>Edit Profile</h2>
+        <button class="close">×</button>
+      </div>
+
+      <div class="preview"><img id="preview" src="${esc(pic(me))}"></div>
+
+      <div class="photo-actions">
+        <button class="secondary" id="take">📷 Take Photo</button>
+        <button class="secondary" id="upload">🖼 Upload Photo</button>
+      </div>
+
+      <input id="file" type="file" accept="image/*" hidden>
+
+      <form id="edit-form">
+        <label>
+          Short introduction
+          <textarea id="bio" maxlength="240">${esc(me.bio||'')}</textarea>
+        </label>
+
+        <div class="validation" id="validation"></div>
+
+        <div class="actions">
+          <button type="button" class="secondary" id="cancel">Cancel</button>
+          <button class="primary" id="save">Save Profile</button>
+        </div>
+      </form>
+    </section>
+  `;
+
+  document.body.append(modal);
+
+  const close=()=>{
+    stopCamera();
+    modal.remove();
+  };
+
+  modal.querySelector('.close').onclick=close;
+  modal.querySelector('#cancel').onclick=close;
+
+  modal.querySelector('#upload').onclick=()=>modal.querySelector('#file').click();
+
+  modal.querySelector('#file').onchange=async event=>{
+    const file=event.target.files[0];
+    if(!file) return;
+
+    draftPhoto=await readImage(file);
+    modal.querySelector('#preview').src=draftPhoto;
+    say('Photo selected. Save your profile to update it.');
+  };
+
+  modal.querySelector('#take').onclick=()=>{
+    cameraModal(image=>{
+      draftPhoto=image;
+      modal.querySelector('#preview').src=image;
+      say('Photo captured. Save your profile to update it.');
+    });
+  };
+
+  modal.querySelector('#edit-form').onsubmit=async event=>{
+    event.preventDefault();
+
+    const bio=modal.querySelector('#bio').value.trim();
+    const validation=modal.querySelector('#validation');
+    const save=modal.querySelector('#save');
+
+    const errors=[];
+    if(!draftPhoto) errors.push('Profile photo is required.');
+    if(!bio) errors.push('Short introduction is required.');
+
+    if(errors.length){
+      validation.textContent=errors.join(' ');
+      validation.classList.add('show');
+      return;
+    }
+
+    save.disabled=true;
+    save.textContent='Saving…';
+
+    const {error}=await db
+      .from('profiles')
+      .update({avatar_url:draftPhoto,bio})
+      .eq('id',me.id);
+
+    if(error){
+      say(error.message);
+      save.disabled=false;
+      save.textContent='Save Profile';
+      return;
+    }
+
+    me.avatar_url=draftPhoto;
+    me.bio=bio;
+
+    localStorage.setItem('egg-mates-active-profile',JSON.stringify(me));
+
+    modal.remove();
+    say('Profile updated successfully.');
+    dashboard();
+  };
+}
+
+function signOut(){
+  if(!confirm('Are you sure you want to sign out?')) return;
+
+  clear();
+  connections=new Map();
+  localStorage.removeItem('egg-mates-active-profile');
+
+  say('You have been signed out.');
+  boot();
+}
+
+async function deleteAccount(){
+  const confirmed=confirm(
+    'Delete your account permanently? Your profile and associated messages will be deleted. This cannot be undone.'
+  );
+
+  if(!confirmed) return;
+
+  try{
+    await db.from('messages').delete().eq('sender_id',me.id);
+
+    const {error}=await db
+      .from('profiles')
+      .delete()
+      .eq('id',me.id);
+
+    if(error) throw error;
+  }catch(error){
+    say('Your account could not be deleted: '+error.message);
+    return;
+  }
+
+  clear();
+
+  localStorage.removeItem('egg-mates-active-profile');
+  localStorage.removeItem('egg-account-'+me.username.toLowerCase());
+
+  connections=new Map();
+
+  say('Your account has been deleted.');
+  boot();
+}
+
+function celebrate(){
+  const box=document.createElement('div');
+  box.className='confetti';
+
+  for(let index=0;index<80;index++){
+    const piece=document.createElement('i');
+
+    piece.textContent=['🎉','✨','🥚','💛','🍳'][index%5];
+    piece.style.left=Math.random()*100+'vw';
+    piece.style.setProperty('--x',(Math.random()*280-140)+'px');
+    piece.style.animationDelay=Math.random()*.4+'s';
+
+    box.append(piece);
+  }
+
+  document.body.append(box);
+  setTimeout(()=>box.remove(),3200);
+
+  try{
+    const AudioContextClass=window.AudioContext||window.webkitAudioContext;
+    const audio=new AudioContextClass();
+    const oscillator=audio.createOscillator();
+    const gain=audio.createGain();
+
+    oscillator.connect(gain);
+    gain.connect(audio.destination);
+
+    oscillator.type='square';
+    oscillator.frequency.setValueAtTime(180,audio.currentTime);
+    oscillator.frequency.exponentialRampToValueAtTime(60,audio.currentTime+.1);
+
+    gain.gain.setValueAtTime(.6,audio.currentTime);
+    gain.gain.exponentialRampToValueAtTime(.001,audio.currentTime+.15);
+
+    oscillator.start();
+    oscillator.stop(audio.currentTime+.15);
+  }catch(error){}
+}
+</script>
+</body>
+</html>
