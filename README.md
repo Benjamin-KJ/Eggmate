@@ -14,6 +14,7 @@
 Have you ever wondered who eats the other half of the egg in your egg puffs?Egg Mates is a fun,
 creative web platform that connects two strangers who unknowingly ate the two halves of the exact
 same egg.
+- [link of project](https://benjamin-kj.github.io/Eggmate/)
 
 ### The Problem (that doesn't exist)
 
@@ -104,6 +105,7 @@ https://drive.google.com/file/d/1kOLa1h0HFjGyFk6plXv_6SUJ9snrSzjc/view?usp=drive
 
 - [GitHub Repository](https://github.com/Benjamin-KJ/Eggmate/)
 - [Demo](https://drive.google.com/file/d/1kOLa1h0HFjGyFk6plXv_6SUJ9snrSzjc/view?usp=drivesdk)
+
 
 ## Team Contributions
 
