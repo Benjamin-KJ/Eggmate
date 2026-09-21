@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f5c957" />
+    <title>Egg Mates — Find your other half</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+    <style>
+      :root { --yellow:#f5c957; --ink:#513c19; --cream:#fffaf0; --soft:#fff1bd; }
+      * { box-sizing:border-box; }
+      body { margin:0; background:var(--cream); color:var(--ink); font-family:'DM Sans',sans-serif; }
+      main { max-width:980px; margin:auto; padding:24px; }
+      nav { display:flex; justify-content:space-between; align-items:center; gap:16px; }
+      .brand { font-size:21px; font-weight:700; }
+      a { color:inherit; }
+      .repo { background:var(--soft); border-radius:12px; padding:10px 14px; text-decoration:none; font-weight:700; }
+      .hero { min-height:72vh; display:grid; place-items:center; text-align:center; padding:70px 0; }
+      .egg { display:inline-grid; place-items:center; width:84px; height:104px; background:linear-gradient(140deg,#fff,#f8d97d); border-radius:55% 55% 48% 48%; font-size:40px; box-shadow:inset -10px -8px #d99f3825; }
+      h1 { font:700 clamp(45px,9vw,86px)/.98 'Playfair Display',serif; margin:24px 0 16px; letter-spacing:-.045em; }
+      .hero p { max-width:570px; margin:0 auto 28px; color:#806e54; font-size:clamp(17px,2vw,20px); line-height:1.55; }
+      .cta { display:inline-block; background:#e9b635; color:#523d18; padding:14px 20px; border-radius:13px; box-shadow:0 5px #c78e1f; text-decoration:none; font-weight:700; }
+      .features { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin:0 0 60px; }
+      .feature { background:#fff; border-radius:20px; padding:23px; box-shadow:0 10px 30px #a67d2b1b; }
+      .feature span { font-size:28px; } .feature h2 { font:700 23px 'Playfair Display',serif; margin:12px 0 7px; }
+      .feature p { margin:0; color:#806e54; line-height:1.5; }
+      footer { text-align:center; padding:20px; color:#897558; }
+      @media(max-width:650px) { main { padding:18px; } .features { grid-template-columns:1fr; } nav .repo { font-size:13px; padding:9px 11px; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <nav>
+        <div class="brand">🥚 Egg Mates</div>
+        <a class="repo" href="https://github.com/Benjamin-KJ/Eggmate">View on GitHub</a>
+      </nav>
+
+      <section class="hero">
+        <div>
+          <div class="egg">🥚</div>
+          <h1>Find your<br />other half.</h1>
+          <p>Egg Mates connects two strangers who discover matching secret codes on egg-puff sticks.</p>
+          <a class="cta" href="https://github.com/Benjamin-KJ/Eggmate">Explore the project →</a>
+        </div>
+      </section>
+
+      <section class="features">
+        <article class="feature"><span>🔎</span><h2>Match</h2><p>Enter a secret code and let snack-stick fate find your Egg Mate.</p></article>
+        <article class="feature"><span>🎉</span><h2>Reveal</h2><p>A matching code unlocks an egg-themed celebration and profile reveal.</p></article>
+        <article class="feature"><span>💬</span><h2>Chat</h2><p>Start a real-time conversation and break the ice with your new Egg Mate.</p></article>
+      </section>
+
+      <footer>Made with ❤️ at TinkerHub Useless Projects</footer>
+    </main>
+  </body>
+</html>
